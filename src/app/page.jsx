@@ -1,18 +1,33 @@
-"use client"; 
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { FileText, Zap, ShieldCheck } from "lucide-react"; // Importing icons
+import { FileText, Zap, ShieldCheck } from "lucide-react";
+import {
+  SignedIn,
+  SignedOut,
+  UserButton,
+  SignIn
+} from "@clerk/nextjs";
 
 const HeroSection = () => {
+  const [showSignIn, setShowSignIn] = useState(false);
+
   return (
     <div className="bg-black text-white min-h-screen flex flex-col items-center justify-center px-4 text-center relative font-mono">
       <nav className="absolute top-0 w-full flex justify-between items-center p-6 max-w-7xl mx-auto">
         <h1 className="text-lg font-semibold">ChatUr-Bot</h1>
         <div className="space-x-4">
-          <button className="text-gray-300 hover:text-white">Log in</button>
-          <button className="bg-white text-black px-4 py-2 rounded-lg font-medium hover:bg-gray-300">
-            Get Started
-          </button>
+          <SignedOut>
+            <button
+              onClick={() => setShowSignIn(true)}
+              className="text-gray-300 hover:text-white"
+            >
+              Log in
+            </button>
+          </SignedOut>
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
         </div>
       </nav>
 
@@ -32,11 +47,20 @@ const HeroSection = () => {
           Give PDFs as input and then play with it and get desired output.
         </p>
         <div className="mt-6 space-x-4">
-          <button className="bg-white text-black px-6 py-3 rounded-full font-medium hover:bg-gray-300">
-            Start Chatting
-          </button>
+          <SignedOut>
+            <button
+              onClick={() => setShowSignIn(true)}
+              className="bg-white text-black px-6 py-3 rounded-full font-medium hover:bg-gray-300"
+            >
+              Start Chatting
+            </button>
+          </SignedOut>
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
         </div>
       </div>
+
       <div className="w-full border-t border-gray-800 my-12"></div>
 
       {/* Text Feature Section */}
@@ -53,7 +77,7 @@ const HeroSection = () => {
         </p>
       </motion.div>
 
-      {/* Feature Section with Scroll Animation */}
+      {/* Feature Section */}
       <div className="mt-24 max-w-6xl w-full flex space-x-6 px-6 pb-12">
         {[
           {
@@ -91,6 +115,21 @@ const HeroSection = () => {
       <footer className="mt-24 w-full py-6 text-center border-t border-gray-800 text-gray-400 text-lg">
         &copy; 2025 ChatUr-Bot. All rights reserved.
       </footer>
+
+      {/* Sign-In Modal */}
+      {showSignIn && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full relative">
+            <button
+              onClick={() => setShowSignIn(false)}
+              className="absolute top-2 right-2 text-black text-xl"
+            >
+              ✖
+            </button>
+            <SignIn />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

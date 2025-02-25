@@ -1,3 +1,4 @@
+import { ClerkProvider } from "@clerk/nextjs";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -11,19 +12,18 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// ✅ Metadata must be in a Server Component (RootLayout is one by default)
 export const metadata = {
   title: "ChatUr-Bot",
-  description: "RAG Based Chat Interface",
+  description: "AI-powered PDF chatbot",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white`}
-      >
-        {children}
-      </body>
-    </html>
+    <ClerkProvider>
+      <html suppressHydrationWarning lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+        <body className="bg-black text-white">{children}</body>
+      </html>
+    </ClerkProvider>
   );
 }
